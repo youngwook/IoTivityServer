@@ -46,6 +46,7 @@ public class BMP280Sensor implements OcPlatform.EntityHandler{
         bmx280 = bmx;
     }
     public synchronized void registerResource() throws OcException {
+        //
         if (null == mResourceHandle) {
             mResourceHandle = OcPlatform.registerResource(mResourceUri, mResourceTypeName, mResourceInterface,
                     this, EnumSet.of(ResourceProperty.DISCOVERABLE, ResourceProperty.OBSERVABLE));
@@ -53,6 +54,7 @@ public class BMP280Sensor implements OcPlatform.EntityHandler{
     }
     @Override
     public EntityHandlerResult handleEntity(OcResourceRequest ocResourceRequest) {
+        //handle request
         EntityHandlerResult entityHandlerResult = EntityHandlerResult.ERROR;
         if (null == ocResourceRequest) {
             Log.d(TAG,"Server request is invalid");
@@ -89,6 +91,7 @@ public class BMP280Sensor implements OcPlatform.EntityHandler{
         }
 
         RequestType requestType = request.getRequestType();
+        //divide requested method
         switch(requestType){
             case GET:
                 Log.d(TAG, "\t\t\tRequest Type is GET");
@@ -107,12 +110,14 @@ public class BMP280Sensor implements OcPlatform.EntityHandler{
         return entityHandlerResult;
     }
     private EntityHandlerResult handleGetRequest(final OcResourceRequest request){
+        //response for Get method request
         EntityHandlerResult entityHandlerResult;
         OcResourceResponse response = new OcResourceResponse();
         response.setRequestHandle(request.getRequestHandle());
         response.setResourceHandle(request.getResourceHandle());
 
         response.setResponseResult(EntityHandlerResult.OK);
+        //set responds value by call getOcRepresentation()
         response.setResourceRepresentation(getOcRepresentation());
         entityHandlerResult = sendResponse(response);
         return entityHandlerResult;
@@ -186,6 +191,7 @@ public class BMP280Sensor implements OcPlatform.EntityHandler{
     }
 
     public OcRepresentation getOcRepresentation() {
+        //get temperature value from BMP280 sensor
         OcRepresentation rep = new OcRepresentation();
 
         Log.d(TAG, "get temperature form sensor");
